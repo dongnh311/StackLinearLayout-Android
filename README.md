@@ -10,10 +10,25 @@ Suport two mode :
 
 Using :
   * Import module SmartLayoutManager to project.
+  * Set minHeight for RecyclerView 
+   
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/cardview_dark_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_view"
+            android:minHeight="100dp"
+            android:layout_height="wrap_content"/>  
+   
   * Using constructor create mode :
     - Stack :
    
-     val smartLayoutStack = SmartLayoutManager(orientation = SmartLayoutManager.VERTICAL, itemVisible = 3, isStackLayout = true, offset = 10)
+     val smartLayoutStack = SmartLayoutManager(orientation = SmartLayoutManager.VERTICAL, itemVisible = 3, isStackLayout = true, offset = 10, modeStack = SmartLayoutManager.STACK_RIGHT)
      
     - Wheel :
     
@@ -25,6 +40,7 @@ Using :
       - isStackLayout : Using stack layout.
       - isCircleLayout : Using circle layout.
       - offset : Adj margin of item.
+      - modeStack : STACK_TOP | STACK_BOTTOM | STACK_LEFT | STACK_RIGHT
    * Create new class and extent class ZoomPostLayoutListener or using ZoomPostLayoutListener for implement zoom, alpha to view.
    
    
