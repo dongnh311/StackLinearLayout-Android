@@ -26,7 +26,7 @@ Using :
             android:minHeight="100dp"
             android:layout_height="wrap_content"/>  
                                                 
-     ```
+    ```
    
   * Using constructor create mode :
     - Stack :
@@ -67,7 +67,7 @@ Using :
         // You can extent class ZoomPostLayoutListener for modify item size and alpha
         smartLayout.configPostListener(ZoomPostLayoutListener(0.08f, transformAlpha = false))
         
-    ```
+   ```
     
  Ex : 
  
