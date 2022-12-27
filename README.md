@@ -12,8 +12,9 @@ Using :
   * Import module SmartLayoutManager to project.
   * Set minHeight for RecyclerView 
    
+   ~~~xml
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recyclerView
             app:layout_constraintStart_toStartOf="parent"
             android:background="@color/cardview_dark_background"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +25,8 @@ Using :
             tools:listitem="@layout/item_view"
             android:minHeight="100dp"
             android:layout_height="wrap_content"/>  
+                                                
+     ~~~
    
   * Using constructor create mode :
     - Stack :
@@ -46,6 +49,8 @@ Using :
    
    Full code : 
    
+   ~~~kotlin
+   
         // If isCircleLayout = false, it same normal linear layout, but have center item
         val smartLayout = SmartLayoutManager(orientation = SmartLayoutManager.HORIZONTAL, itemVisible = 3, isCircleLayout = true, offset = 10)
         smartLayout.addOnItemSelectionListener(object : OnCenterItemSelectionListener {
@@ -62,6 +67,8 @@ Using :
         // You can extent class ZoomPostLayoutListener for modify item size and alpha
         smartLayout.configPostListener(ZoomPostLayoutListener(0.08f, transformAlpha = false))
         
+    ~~~
+    
  Ex : 
  
  Stack layout :
