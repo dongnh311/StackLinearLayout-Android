@@ -49,8 +49,23 @@ Using :
  Ex : 
  
  Stack layout :
+ 
+ Top
+ 
  <img width="345" alt="Screenshot 2022-12-27 at 13 32 23" src="https://user-images.githubusercontent.com/40257252/209622189-ef6a0365-30d8-4c23-8ddd-9fff35eb3902.png">
  
+ Bottom : 
+ 
+ <img width="345" alt="Screenshot 2022-12-27 at 13 50 24" src="https://user-images.githubusercontent.com/40257252/209624387-74971035-403c-400d-8003-e16ef823b308.png">
+
+Left : 
+
+<img width="547" alt="Screenshot 2022-12-27 at 13 54 58" src="https://user-images.githubusercontent.com/40257252/209624949-da29985e-c90b-4566-a870-f1d55e0d94d3.png">
+
+Right : 
+
+<img width="545" alt="Screenshot 2022-12-27 at 13 55 58" src="https://user-images.githubusercontent.com/40257252/209624981-d9ffd6fa-6e5b-44a7-b430-ce14ee68ff73.png">
+
  
  Circle Layout : true
  
