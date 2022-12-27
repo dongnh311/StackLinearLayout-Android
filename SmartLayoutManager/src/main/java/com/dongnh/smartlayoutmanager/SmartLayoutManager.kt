@@ -26,9 +26,13 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
         const val VERTICAL = OrientationHelper.VERTICAL
         const val MAX_VISIBLE_ITEMS = 3
         const val INVALID_POSITION = -1
+        const val STACK_TOP = 1
+        const val STACK_BOTTOM = 2
+        const val STACK_LEFT = 3
+        const val STACK_RIGHT = 4
     }
 
-    constructor(orientation: Int, itemVisible: Int, isStackLayout: Boolean, offset: Int) {
+    constructor(orientation: Int, itemVisible: Int, isStackLayout: Boolean, offset: Int, modeStack: Int) {
         this.orientation = orientation
         this.isStackLayout = isStackLayout
         if (isStackLayout) {
@@ -36,6 +40,15 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
         }
         this.maxItemShow = itemVisible
         this.offsetBetweenItem = offset
+        this.modeStack = modeStack
+
+        if ((modeStack == STACK_TOP || modeStack == STACK_BOTTOM) && orientation == HORIZONTAL) {
+            throw java.lang.Exception("Wrong type stack")
+        }
+
+        if ((modeStack == STACK_LEFT || modeStack == STACK_RIGHT) && orientation == VERTICAL) {
+            throw java.lang.Exception("Wrong type stack")
+        }
     }
 
     constructor(orientation: Int, itemVisible: Int, isCircleLayout: Boolean, offset: Int, isStackLayout: Boolean = false) {
@@ -52,6 +65,7 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
     private var isStackLayout = false
 
     private var maxItemShow = MAX_VISIBLE_ITEMS
+    private var modeStack = STACK_TOP
 
     private var decoratedChildSizeInvalid = false
     private var decoratedChildWidth: Int = 0
@@ -403,7 +417,16 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
         val start: Int = (width - decoratedChildWidth) / 2
         val end: Int = start + decoratedChildWidth
         var centerViewTop: Int = (height - decoratedChildHeight) / 2
-        if (isStackLayout) centerViewTop = 0
+        if (isStackLayout) {
+            when (modeStack) {
+                STACK_TOP -> {
+                    centerViewTop = 0
+                }
+                STACK_BOTTOM -> {
+                    centerViewTop = height
+                }
+            }
+        }
         var i = 0
         val count: Int = layoutHelper.layoutOrder?.size ?: 0
         while (i < count) {
@@ -412,15 +435,28 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
             var top = centerViewTop + offset
 
             if (isStackLayout) {
-                if (layoutOrder.itemPositionDiff > 0F) {
-                    top += offsetBetweenItem
-                } else if (layoutOrder.itemPositionDiff < 0F) {
-                    top = -decoratedChildHeight
+                if (modeStack == STACK_TOP) {
+                    if (layoutOrder.itemPositionDiff > 0F) {
+                        top += offsetBetweenItem
+                    } else if (layoutOrder.itemPositionDiff < 0F) {
+                        top = -decoratedChildHeight
+                    }
                 }
-
             }
 
-            val bottom: Int = top + decoratedChildHeight
+            var bottom: Int = top + decoratedChildHeight
+
+            if (isStackLayout) {
+                if (modeStack == STACK_BOTTOM) {
+                    bottom = centerViewTop
+                    if (layoutOrder.itemPositionDiff > 0F) {
+                        bottom = -decoratedChildHeight
+                    } else if (layoutOrder.itemPositionDiff < 0F) {
+                        bottom = centerViewTop + offset
+                    }
+                    top = bottom - decoratedChildHeight
+                }
+            }
             fillChildItem(start, top, end, bottom, layoutOrder, recycler, i)
             ++i
         }
@@ -429,14 +465,48 @@ class SmartLayoutManager : RecyclerView.LayoutManager , RecyclerView.SmoothScrol
     private fun fillDataHorizontal(recycler: RecyclerView.Recycler, width: Int, height: Int) {
         val top: Int = (height - decoratedChildHeight) / 2
         val bottom: Int = top + decoratedChildHeight
-        val centerViewStart: Int = (width - decoratedChildWidth) / 2
+        var centerViewStart: Int = (width - decoratedChildWidth) / 2
+
+        if (isStackLayout) {
+            when (modeStack) {
+                STACK_LEFT -> {
+                    centerViewStart = 0
+                }
+                STACK_RIGHT -> {
+                    centerViewStart = width
+                }
+            }
+        }
         var i = 0
         val count: Int = layoutHelper.layoutOrder?.size ?: 0
         while (i < count) {
             val layoutOrder: LayoutOrder = layoutHelper.layoutOrder?.get(i)!!
             val offset: Int = getCardOffsetByPositionDiff(layoutOrder.itemPositionDiff)
-            val start = centerViewStart + offset
-            val end: Int = start + decoratedChildWidth
+            var start = centerViewStart + offset
+
+            if (isStackLayout) {
+                if (modeStack == STACK_LEFT) {
+                    if (layoutOrder.itemPositionDiff > 0F) {
+                        start += offsetBetweenItem
+                    } else if (layoutOrder.itemPositionDiff < 0F) {
+                        start = -decoratedChildWidth
+                    }
+                }
+            }
+
+            var end: Int = start + decoratedChildWidth
+
+            if (isStackLayout) {
+                if (modeStack == STACK_RIGHT) {
+                    end = centerViewStart
+                    if (layoutOrder.itemPositionDiff > 0F) {
+                        end = -decoratedChildWidth
+                    } else if (layoutOrder.itemPositionDiff < 0F) {
+                        end = centerViewStart + offset
+                    }
+                    start = end - decoratedChildWidth
+                }
+            }
             fillChildItem(start, top, end, bottom, layoutOrder, recycler, i)
             ++i
         }

@@ -60,8 +60,4 @@ class ZoomPostLayoutListener(var scaleMultiplier: Float = 0F, var transformAlpha
 
         return ItemTransformation(scale, scale, translateX, translateY, translateZ)
     }
-
-    private fun computeDepth(degree: Int, view: View): Float {
-        return (view.measuredHeight - cos(Math.toRadians(degree.toDouble())) * view.measuredHeight).toFloat()
-    }
 }

@@ -39,10 +39,11 @@ class MainActivity : AppCompatActivity() {
         adapterViewItem.dataList.add(ItemModel(title = "11"))
 
         // Stack layout or circle layout
-        val smartLayoutStack = SmartLayoutManager(orientation = SmartLayoutManager.VERTICAL, itemVisible = 3, isStackLayout = true, offset = 10)
+        val smartLayoutStack = SmartLayoutManager(orientation = SmartLayoutManager.HORIZONTAL, itemVisible = 3,
+            isStackLayout = true, offset = 10, modeStack = SmartLayoutManager.STACK_RIGHT)
 
         // If isCircleLayout = false, it same normal linear layout, but have center item
-        val smartLayout = SmartLayoutManager(orientation = SmartLayoutManager.HORIZONTAL, itemVisible = 3, isCircleLayout = true, offset = 10)
+        val smartLayout = SmartLayoutManager(orientation = SmartLayoutManager.VERTICAL, itemVisible = 3, isCircleLayout = false, offset = 10)
         smartLayout.addOnItemSelectionListener(object : OnCenterItemSelectionListener {
             override fun onCenterItemChanged(adapterPosition: Int) {
                 val item = adapterViewItem.dataList[adapterPosition]
@@ -53,9 +54,9 @@ class MainActivity : AppCompatActivity() {
         dataBinding.recyclerView.addOnScrollListener(CenterScrollListener())
         dataBinding.recyclerView.setHasFixedSize(true)
         dataBinding.recyclerView.adapter = adapterViewItem
-        dataBinding.recyclerView.layoutManager = smartLayout
+        dataBinding.recyclerView.layoutManager = smartLayoutStack
         // You can extent class ZoomPostLayoutListener for modify item size and alpha
-        smartLayout.configPostListener(ZoomPostLayoutListener(0.08f, transformAlpha = false))
+        smartLayoutStack.configPostListener(ZoomPostLayoutListener(0.09f, transformAlpha = false))
 
         adapterViewItem.notifyDataSetChanged()
     }
